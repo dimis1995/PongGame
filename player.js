@@ -6,7 +6,7 @@ class Player {
     }
 
     move(vel) {
-        if (this.y + vel < height || this.y + vel > 0)this.y += vel;
+        if (this.y + vel < height && this.y + vel > 0)this.y += vel;
     }
 
     draw() {
