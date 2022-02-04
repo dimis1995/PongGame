@@ -8,6 +8,7 @@ var player1Score;
 var player2Score;
 let checkbox1;
 let checkbox2;
+let neuralAi;
 
 function setup() {
     createCanvas(840, 640);
@@ -17,6 +18,7 @@ function setup() {
     player2 = new Player(height/2, 2);
     evilOverlord = new Ai(player2);
     goodOverlord = new Ai(player1);
+    neuralAi = new NeuralAi(player1);
     ballHit = 0;
     player1Score = 0;
     player2Score = 0;
