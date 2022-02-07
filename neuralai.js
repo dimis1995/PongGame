@@ -1,14 +1,18 @@
 // work in progress
 class NeuralAi {
     
-    constructor(player) {
+    constructor(player, weights) {
         this.player = player;
-        this.weights = [Math.random(),Math.random(),Math.random()];
+        if (weights) {
+            this.weights = weights
+        } else {
+            this.weights = [Math.random(),Math.random(),Math.random(), Math.random()];
+        }
         this.previousBallX = null;
         this.previousBallY = null;
         this.previousPlayerY = null;
         this.upProbability = 0;
-        this.rounds = 0;
+        this.fitness = 0;
     }
 
     observe(ball) {
@@ -29,35 +33,35 @@ class NeuralAi {
     }
 
     applyNeuralNets(inputObservations) {
-        return inputObservations[0]*this.weights[0] + inputObservations[1]*this.weights[1] + inputObservations[2] * this.weights[2];
+        return inputObservations[0]*this.weights[0] 
+        + inputObservations[1]*this.weights[1] 
+        + inputObservations[2] * this.weights[2] 
+        + this.weights[3];
     }
 
     sigmoid(z) {
         return 1/ (1 + Math.exp(-z))
     }
 
-    takeRandomAction(probability) {
+    takeAction(probability) {
         return (Math.random() < probability) ? 1 : 2;
     }
 
     think(ball) {
         let inputObservations = this.observe(ball);
         this.upProbability = this.applyNeuralNets(inputObservations);
-        if (this.takeRandomAction(this.upProbability) == 1) {
+        if (this.takeAction(this.upProbability) == 1) {
             this.player.move(-25);
         } else {
             this.player.move(25);
         }
     }
 
-    roundEnded(win, ball) {
-        this.rounds += 1;
-        if (win === false) {
-            let error = this.sigmoid(this.player.y - ball.pos.y);
-            let inputObservations = this.observe(ball);
-            this.weights[0] += error * 0.1 * inputObservations[0]; // learning rate : 0.1
-            this.weights[1] += error * 0.1 * inputObservations[1];
-            this.weights[2] += error * 0.1 * inputObservations[2];
+    ballChanceToHit(hit) {
+        if (hit == true) {
+            this.fitness += 1;
+        } else {
+            this.fitness -= 1;
         }
     }
 
